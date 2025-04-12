@@ -1,9 +1,9 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 import os
 import google.generativeai as genai
 from dotenv import load_dotenv
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder="static", static_url_path="", template_folder="static")
 load_dotenv()
 
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
@@ -27,11 +27,7 @@ model = genai.GenerativeModel(
     model_name='gemini-2.0-flash',
     safety_settings=safety_settings,
     generation_config=generation_config,
-    system_instruction=(
-        "You are a personal chef. Your job is to provide the user with meals and information "
-        "based on their desired diet, height, weight, and gender. Provide 3 suggestions for "
-        "breakfast, lunch, & dinner unless they specify otherwise."
-    )
+    system_instruction="You are a personal chef."
 )
 
 history = []
