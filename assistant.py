@@ -31,6 +31,9 @@ model = genai.GenerativeModel(
 )
 
 history = []
+@app.route('/')
+def index():
+    return send_from_directory('server', 'main.html')
 
 @app.route('/chat', methods=['POST'])
 def chat():
