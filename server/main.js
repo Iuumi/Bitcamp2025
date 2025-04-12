@@ -1,6 +1,8 @@
 const typingForm = document.querySelector(".typing-form");
 const chatList = document.querySelector(".chat-list");
 const toggleThemeButton = document.querySelector("#toggle-theme-button");
+const messageInput = typingForm.querySelector(".typing-input"); // Get the input field
+const sendButton = typingForm.querySelector(".icon.material-symbols-rounded"); // Get the send button
 
 let userMessage = null;
 
@@ -12,21 +14,20 @@ let userMessage = null;
   })
   .catch(error => console.error('Error fetching data:', error));
 */
-const API_URL = `http://127.0.0.1:5000/chat`;
+const API_URL = `/chat`;
 
 const handleOutgoingChat = async () => {
-    userMessage = typingForm.querySelector(".typing-input").value.trim();
+    userMessage = messageInput.value.trim();
     if (!userMessage) return;
 
-    const html = `<div class="message-content">
-                <img src="user.png" alt="User Image" class="avatar">
-                <p class="text"></p>
-            </div>`;
-    const outgoingMessageDiv = createMessageElement(html, "outgoing");
-    outgoingMessageDiv.querySelector(".text").innerText = userMessage;
+    const userHtml = `<div class="message-content">
+                        <img src="user.png" alt="User Image" class="avatar">
+                        <p class="text">${userMessage}</p>
+                    </div>`;
+    const outgoingMessageDiv = createMessageElement(userHtml, "outgoing");
     chatList.appendChild(outgoingMessageDiv);
 
-    typingForm.reset();
+    messageInput.value = '';
     chatList.scrollTo(0, chatList.scrollHeight);
     document.body.classList.add("hide-header");
     showLoadingAnimation();
@@ -39,16 +40,63 @@ const handleOutgoingChat = async () => {
         });
         const data = await res.json();
 
+        const loadingDiv = chatList.querySelector(".message.incoming.loading");
+        if (loadingDiv) {
+            chatList.removeChild(loadingDiv);
+        }
+
+        // Format the API response before displaying
+        const formattedResponse = formatApiResponse(data.response);
+
         const botHtml = `<div class="message-content">
-                            <img src="bot.png" alt="Gemini Image" class="avatar">
-                            <p class="text">${data.response}</p>
-                         </div>`;
+                            <img src="gemini.png" alt="Gemini Image" class="avatar">
+                            <p class="text">${formattedResponse}</p>
+                        </div>
+                        <span class="icon material-symbols-rounded copy-button">content_copy</span>`;
         const incomingMessageDiv = createMessageElement(botHtml, "incoming");
         chatList.appendChild(incomingMessageDiv);
         chatList.scrollTo(0, chatList.scrollHeight);
+
+        const copyButton = incomingMessageDiv.querySelector(".copy-button");
+        if (copyButton) {
+            copyButton.addEventListener("click", () => {
+                navigator.clipboard.writeText(data.response); // Copy the raw response
+                // Optionally provide visual feedback
+            });
+        }
+
     } catch (error) {
         console.error("Error communicating with the API:", error);
+        const loadingDiv = chatList.querySelector(".message.incoming.loading");
+        if (loadingDiv) {
+            chatList.removeChild(loadingDiv);
+        }
+        const errorHtml = `<div class="message-content">
+                                <img src="gemini.png" alt="Gemini Image" class="avatar">
+                                <p class="text">Error: Failed to get response.</p>
+                            </div>`;
+        const errorDiv = createMessageElement(errorHtml, "incoming", "error");
+        chatList.appendChild(errorDiv);
+        chatList.scrollTo(0, chatList.scrollHeight);
     }
+};
+
+const formatApiResponse = (responseText) => {
+    let formattedText = responseText.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>'); // Bold text
+    formattedText = formattedText.replace(/\*(.*?)\*/g, '<i>$1</i>');   // Italic text
+    formattedText = formattedText.replace(/```(.*?)```/gs, '<pre><code>$1</code></pre>'); // Code blocks
+    formattedText = formattedText.replace(/^- (.*)$/gm, '<li>$1</li>'); // Unordered lists
+    const ulRegex = /^(<br>)?(<li>.*?<\/li>(<br>)?)+$/gm;
+    formattedText = formattedText.replace(ulRegex, '<ul>$&</ul>');
+    formattedText = formattedText.replace(/^\d+\. (.*)$/gm, '<li>$1</li>'); // Ordered lists
+    const olRegex = /^(<br>)?(<li>.*?<\/li>(<br>)?)+$/gm;
+    formattedText = formattedText.replace(olRegex, '<ol>$&</ol>');
+    formattedText = formattedText.replace(/^# (.*)$/gm, '<h1>$1</h1>');     // Heading 1
+    formattedText = formattedText.replace(/^## (.*)$/gm, '<h2>$1</h2>');    // Heading 2
+    formattedText = formattedText.replace(/^### (.*)$/gm, '<h3>$1</h3>');   // Heading 3
+    formattedText = formattedText.replace(/\n/g, '<br>');                 // Line breaks
+
+    return formattedText;
 };
 
 //const loadLocalStorageData = () => {
@@ -65,9 +113,9 @@ const handleOutgoingChat = async () => {
     //document.body.classList.toggle("hide-header", savedChats);
     //chatList.scrollTo(0,chatList.scrollHeight); //Scroll to the bottom}
 //create a new message element and return it
-const createMessageElement = (content, className) => {
+const createMessageElement = (content, className, ...additionalClasses) => {
     const div = document.createElement("div");
-    div.classList.add("message", className);
+    div.classList.add("message", className, ...additionalClasses);
     div.innerHTML = content;
     return div;
 }
@@ -110,6 +158,7 @@ const showLoadingAnimation= () => {
 
     const incomingMessageDiv = createMessageElement(html, "incoming","loading");
     chatList.appendChild(incomingMessageDiv);
+    chatList.scrollTo(0, chatList.scrollHeight);
 
     //generateAPIResponse();
     }
