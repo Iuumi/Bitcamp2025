@@ -11,7 +11,7 @@ fetch('/getGeminiData')
     console.log('Gemini data:', data);
   })
   .catch(error => console.error('Error fetching data:', error));
-const API_URL = `http://127.0.0.1:5000/chat`; //I'm going to wait for josh becuase i think he has been doing this
+const API_URL = `http://127.0.0.1:5000/chat`;
 
 const handleOutgoingChat = async () => {
     userMessage = typingForm.querySelector(".typing-input").value.trim();
