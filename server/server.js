@@ -1,4 +1,6 @@
+require('dotenv').config();
 const express = require("express");
+const axios = require('axios');
 const app = express();
 const cors = require("cors");
 const bodyParser = require("body-parser");
@@ -9,9 +11,20 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(bodyParser.json())
 
-app.get("/api", (req, res) => {
-    res.json({fruits: ["apple", "Orange", "Banana"]})
-})
+app.get('/getGeminiData', async (req, res) => {
+    try {
+      const response = await axios.get('https://api.gemini.com/v1/some_endpoint', {
+        headers: {
+          'X-GEMINI-APIKEY': process.env.GEMINI_API_KEY
+        }
+      });
+      res.json(response.data);
+    } catch (error) {
+      res.status(500).send('Error fetching data from Gemini');
+    }
+  });
+  
+  app.listen(8080, () => console.log(`Server running on port 8080`));
 
 app.post("/chat", async (req, res) => {
     const { message } = req.body;

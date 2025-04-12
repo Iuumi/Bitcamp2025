@@ -5,9 +5,50 @@ const toggleThemeButton = document.querySelector("#toggle-theme-button");
 let userMessage = null;
 
 //API confguration
-const API_KEY = ""
-const API_URL = ``; //I'm going to wait for josh becuase i think he has been doing this
+fetch('/getGeminiData')
+  .then(response => response.json())
+  .then(data => {
+    console.log('Gemini data:', data);
+  })
+  .catch(error => console.error('Error fetching data:', error));
+const API_URL = `http://127.0.0.1:5000/chat`; //I'm going to wait for josh becuase i think he has been doing this
 
+const handleOutgoingChat = async () => {
+    userMessage = typingForm.querySelector(".typing-input").value.trim();
+    if (!userMessage) return;
+
+    const html = `<div class="message-content">
+                <img src="user.png" alt="User Image" class="avatar">
+                <p class="text"></p>
+            </div>`;
+    const outgoingMessageDiv = createMessageElement(html, "outgoing");
+    outgoingMessageDiv.querySelector(".text").innerText = userMessage;
+    chatList.appendChild(outgoingMessageDiv);
+
+    typingForm.reset();
+    chatList.scrollTo(0, chatList.scrollHeight);
+    document.body.classList.add("hide-header");
+    showLoadingAnimation();
+
+    try {
+        const res = await fetch(API_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ message: userMessage })
+        });
+        const data = await res.json();
+
+        const botHtml = `<div class="message-content">
+                            <img src="bot.png" alt="Gemini Image" class="avatar">
+                            <p class="text">${data.response}</p>
+                         </div>`;
+        const incomingMessageDiv = createMessageElement(botHtml, "incoming");
+        chatList.appendChild(incomingMessageDiv);
+        chatList.scrollTo(0, chatList.scrollHeight);
+    } catch (error) {
+        console.error("Error communicating with the API:", error);
+    }
+};
 
 //const loadLocalStorageData = () => {
     //const savedchats = localStorage.getItem("savedChats");
@@ -72,7 +113,7 @@ const showLoadingAnimation= () => {
     //generateAPIResponse();
     }
     
-//Handle sending outgoing chat messages
+/*Handle sending outgoing chat messages
 const handleOutgoingChat = () => {
     userMessage = typingForm.querySelector(".typing-input").value.trim();
     if(!userMessage) return; //Exit if no message
@@ -89,7 +130,7 @@ const handleOutgoingChat = () => {
     chatList.scrollTo(0,chatList.scrollHeight); //Scroll to the bottom
     document.body.classList.add("hide-header"); //Hide the heading one chat starts
     setTimeout(showLoadingAnimation, 500); //show loading animation after a delay
-}
+} */
 
 //toggleThemeButton.addEventListener("click", () => {
     //document.body.classList.toggle("light_mode");
