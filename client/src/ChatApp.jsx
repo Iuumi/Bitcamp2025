@@ -1,33 +1,37 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 const ChatApp = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [history, setHistory] = useState([]);
 
   const sendMessage = async () => {
     if (!input.trim()) return;
 
     const userMessage = { sender: "user", text: input };
     setMessages((prev) => [...prev, userMessage]);
-    setInput("");
     setIsLoading(true);
 
     try {
-      const response = await fetch("http://localhost:5000/chat", {
+      const response = await fetch("http://localhost:8080/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: input }),
+        body: JSON.stringify({
+          message: input,
+          history: history,
+        }),
       });
 
       const data = await response.json();
-      const botMessage = { sender: "bot", text: data.reply };
 
-      setMessages((prev) => [...prev, botMessage]);
-    } catch (error) {
+      setMessages((prev) => [...prev, { sender: "bot", text: data.reply }]);
+      setHistory(data.history);
+      setInput("");
+    } catch (err) {
       setMessages((prev) => [
         ...prev,
-        { sender: "bot", text: "Something went wrong." },
+        { sender: "bot", text: "Error reaching the server." },
       ]);
     } finally {
       setIsLoading(false);
@@ -39,22 +43,22 @@ const ChatApp = () => {
   };
 
   return (
-    <div className="chat-container" style={styles.container}>
-      <h2>ChatGPT Clone</h2>
+    <div style={styles.container}>
+      <h2 style={styles.title}>🍳 Meal Planning Chatbot</h2>
       <div style={styles.chatBox}>
-        {messages.map((msg, idx) => (
+        {messages.map((msg, i) => (
           <div
-            key={idx}
+            key={i}
             style={{
               ...styles.message,
               alignSelf: msg.sender === "user" ? "flex-end" : "flex-start",
-              background: msg.sender === "user" ? "#dcf8c6" : "#ececec",
+              backgroundColor: msg.sender === "user" ? "#dcf8c6" : "#f1f0f0",
             }}
           >
             {msg.text}
           </div>
         ))}
-        {isLoading && <div style={styles.message}>Typing...</div>}
+        {isLoading && <div style={styles.message}>Bot is typing...</div>}
       </div>
       <div style={styles.inputArea}>
         <input
@@ -62,7 +66,7 @@ const ChatApp = () => {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyPress}
-          placeholder="Type a message..."
+          placeholder="Type your question about meals..."
         />
         <button style={styles.button} onClick={sendMessage}>
           Send
@@ -76,18 +80,22 @@ const styles = {
   container: {
     maxWidth: "600px",
     margin: "0 auto",
+    padding: "1rem",
+    fontFamily: "Arial, sans-serif",
     display: "flex",
     flexDirection: "column",
     height: "100vh",
-    padding: "1rem",
-    fontFamily: "Arial, sans-serif",
+  },
+  title: {
+    textAlign: "center",
+    marginBottom: "1rem",
   },
   chatBox: {
     flex: 1,
+    overflowY: "auto",
     display: "flex",
     flexDirection: "column",
     gap: "0.5rem",
-    overflowY: "auto",
     padding: "1rem",
     border: "1px solid #ccc",
     borderRadius: "8px",

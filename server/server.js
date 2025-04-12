@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const { GoogleGenerativeAI } = require("google.generativeai")
+const { GoogleGenerativeAI } = require("@google/generative-ai")
 const corsOptions = {
     origin: ["http://localhost:5173"]
 }
@@ -18,7 +18,7 @@ app.post("/chat", async (req, res) => {
     if (!message) {
         return res.status(400).json({ error: "No message provided" });
       }
-      
+
     try {
     const result = await model.generateContent(message);
     const reply = result.response.text();
