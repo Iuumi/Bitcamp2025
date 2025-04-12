@@ -3,12 +3,18 @@ const chatList = document.querySelector(".chat-list");
 
 let userMessage = null;
 
+const API_URL = ``; //I'm going to wait for josh becuase i think he has been doing this
+
 //create a new message element and return it
 const createMessageElement = (content, className) => {
     const div = document.createElement("div");
     div.classList.add("message", className);
     div.innerHTML = content;
     return div;
+}
+
+const generateAPIResponse = () => {
+
 }
 
 // Show a loading animation while waiting for API response
@@ -26,6 +32,8 @@ const showLoadingAnimation= () => {
 
     const incomingMessageDiv = createMessageElement(html, "incoming","loading");
     chatList.appendChild(incomingMessageDiv);
+
+    generateAPIResponse();
     }
     
 //Handle sending outgoing chat messages
