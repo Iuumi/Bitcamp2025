@@ -3,6 +3,7 @@ import google.generativeai as genai
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from dotenv import load_dotenv
+import traceback
 load_dotenv()
 
 app = Flask(__name__)
@@ -44,10 +45,45 @@ model = genai.GenerativeModel(
 )
 
 history = []
+#print("Bot: Hello, what are you looking for today?")
+@app.route("/chat", methods=["POST"])
+def chat():
+    try:
+        print("Received a request!")  # Debug
+        data = request.get_json()
+        print("Parsed JSON:", data)
 
+        message = data.get("message")
+        history = data.get("history", [])
+
+        if not message:
+            print("No message provided")  # Debug
+            return jsonify({"error": "No message provided"}), 400
+
+        chat_session = model.start_chat(history=history)
+        response = chat_session.send_message(message)
+        print("Raw response from Gemini:", response)
+
+        reply = response.text if hasattr(response, "text") else str(response)
+
+        history.append({"role": "user", "parts": [message]})
+        history.append({"role": "model", "parts": [reply]})
+
+        return jsonify({"reply": reply, "history": history})
+
+    except Exception as e:
+        print("🔥 EXCEPTION CAUGHT 🔥")
+        import traceback
+        traceback.print_exc()
+        return jsonify({
+            "error": "Internal Server Error",
+            "details": str(e)
+        }), 500
+
+"""
 @app.route("/chat", methods = ["POST"])
 def chat():
-    data = request.get_json
+    data = request.get_json()
     message = data.get("message")
     history = data.get("history", [])
 
@@ -64,3 +100,4 @@ def chat():
 
 if __name__ == "__main__":
     app.run(port=8080)
+    """
