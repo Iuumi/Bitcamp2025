@@ -3,6 +3,8 @@ const chatList = document.querySelector(".chat-list");
 const toggleThemeButton = document.querySelector("#toggle-theme-button");
 const messageInput = typingForm.querySelector(".typing-input");
 const sendButton = typingForm.querySelector(".icon.material-symbols-rounded");
+const deleteChatButton = document.querySelector("#delete-chat-button");
+
 
 const API_URL = `/chat`;
 let userMessage = null;
@@ -147,15 +149,50 @@ typingForm.addEventListener("submit", (e) => {
     handleOutgoingChat();
 });
 
+// Show a loading animation while waiting for API response
+const showLoadingAnimation= () => {
+    const html = `<div class="message-content">
+                    <img src="user.png" alt="Gemini" Image" class="avatar">
+                    <p class="text"></p>
+                    <div class="loading-indicator">
+                        <div class="loading-bar"></div>
+                        <div class="loading-bar"></div>
+                        <div class="loading-bar"></div>
+                    </div>
+                </div>
+                <span onclick ="copyMessage(this)" class="icon material-symbols-rounded">content_copy
+                </span>`;
+
+    const incomingMessageDiv = createMessageElement(html, "incoming","loading");
+    chatList.appendChild(incomingMessageDiv);
+    }
+
+//Copy message text to the clipboard
+const copyMessage = (copyIcon) => {
+    const messagetext = copyIcon.parentElement.querySelector(".text").innerText;
+
+    navigator.clipboard.writeText()
+    copyIcon.innerText = "done"; //Show tick icon
+    setTimeout(() => copyIcon.innerText="content_copy", 1000); //revert icon after 1 second
+
+
+
 // Load previous chat
 loadLocalStorageData();
 
-// Delete button functionality
-const deleteButton = document.querySelector("#clear-chat-button");
-if (deleteButton) {
-    deleteButton.addEventListener("click", () => {
-        chatList.innerHTML = "";
+//Delete all chats from local storange when button is clicked
+deleteChatButton.addEventListener("click",() => {
+    if(confirm("Are you sure you want to delete all messages?")){
         localStorage.removeItem("savedChats");
-        document.body.classList.remove("hide-header");
-    });
-}
+        loadLocalStorageData();
+    }
+
+// Delete button functionality
+//const deleteButton = document.querySelector("#clear-chat-button");
+//if (deleteButton) {
+    //deleteButton.addEventListener("click", () => {
+        //chatList.innerHTML = "";
+        //localStorage.removeItem("savedChats");
+        //document.body.classList.remove("hide-header");
+    //});
+//}
