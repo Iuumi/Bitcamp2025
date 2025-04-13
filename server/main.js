@@ -152,7 +152,7 @@ typingForm.addEventListener("submit", (e) => {
 // Show a loading animation while waiting for API response
 const showLoadingAnimation= () => {
     const html = `<div class="message-content">
-                    <img src="user.png" alt="Gemini" Image" class="avatar">
+                    <img src="mealbot.png" alt="Gemini" Image" class="avatar">
                     <p class="text"></p>
                     <div class="loading-indicator">
                         <div class="loading-bar"></div>
@@ -183,12 +183,14 @@ loadLocalStorageData();
 //Delete all chats from local storange when button is clicked
 deleteChatButton.addEventListener("click",() => {
     if(confirm("Are you sure you want to delete all messages?")){
+        chatList.innerHTML = ""
         localStorage.removeItem("savedChats");
         loadLocalStorageData();
+        document.body.classList.remove("hide-header");
     }
 });
 
-// Delete button functionality
+// Delete button functionality -REPLACED WITH ABOVE - Megan
 //const deleteButton = document.querySelector("#clear-chat-button");
 //if (deleteButton) {
     //deleteButton.addEventListener("click", () => {

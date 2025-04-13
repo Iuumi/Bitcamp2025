@@ -191,9 +191,9 @@ line-height:3.6rem;
     animation:animate 3s linear infinite;
 }
 
-.chat-list .loading-indicator .loading-bar:last-child{
+/*.chat-list .loading-indicator .loading-bar:last-child{
     width: 70%;
-}
+}*/
 
 @keyframes animate {
     0% {
