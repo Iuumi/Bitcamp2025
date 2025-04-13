@@ -40,7 +40,7 @@ const handleOutgoingChat = async () => {
         const formattedResponse = formatApiResponse(data.response);
 
         const botHtml = `<div class="message-content">
-                            <img src="gemini.png" alt="Gemini Image" class="avatar">
+                            <img src="mealbot.png" alt="Mealbot Image" class="avatar">
                             <div class="text">${formattedResponse}</div>
                          </div>
                          <span class="icon material-symbols-rounded copy-button">content_copy</span>`;
@@ -66,7 +66,7 @@ const handleOutgoingChat = async () => {
         if (loadingDiv) chatList.removeChild(loadingDiv);
 
         const errorHtml = `<div class="message-content">
-                                <img src="gemini.png" alt="Gemini Image" class="avatar">
+                                <img src="mealbot.png" alt="Mealbot Image" class="avatar">
                                 <p class="text">Error: Failed to get response.</p>
                             </div>`;
         const errorDiv = createMessageElement(errorHtml, "incoming", "error");
@@ -103,7 +103,7 @@ const createMessageElement = (content, className, ...additionalClasses) => {
 
 const showLoadingAnimation = () => {
     const html = `<div class="message-content">
-                    <img src="user.png" alt="Gemini Image" class="avatar">
+                    <img src="user.png" alt="User Image" class="avatar">
                     <p class="text"></p>
                     <div class="loading-indicator">
                         <div class="loading-bar"></div>
