@@ -39,7 +39,7 @@ const handleOutgoingChat = async () => {
 
         const botHtml = `<div class="message-content">
                             <img src="gemini.png" alt="Gemini Image" class="avatar">
-                            <p class="text">${formattedResponse}</p>
+                            <div class="text">${formattedResponse}</div>
                          </div>
                          <span class="icon material-symbols-rounded copy-button">content_copy</span>`;
         const incomingMessageDiv = createMessageElement(botHtml, "incoming");
@@ -91,7 +91,6 @@ const formatApiResponse = (text) => {
 
     return formatted;
 };
-
 
 const createMessageElement = (content, className, ...additionalClasses) => {
     const div = document.createElement("div");
@@ -150,7 +149,6 @@ typingForm.addEventListener("submit", (e) => {
 
 // Load previous chat
 loadLocalStorageData();
-
 
 // Delete button functionality
 const deleteButton = document.querySelector("#clear-chat-button");

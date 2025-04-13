@@ -141,7 +141,10 @@ line-height:3.6rem;
     }
 }
 
-.chat-list .message .text{
+.chat-list .message .text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
     color: var(--text-color);
 }
 
@@ -276,4 +279,11 @@ line-height:3.6rem;
     margin-top: 1rem;
     text-align: center;
     color: var(--placeholder-color);
+}
+
+.response-wrapper {
+    padding: 0.5rem 0;
+    white-space: pre-wrap;
+    line-height: 1.6;
+    word-wrap: break-word;
 }
