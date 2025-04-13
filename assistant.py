@@ -10,8 +10,8 @@ load_dotenv()
 genai.configure(api_key="Gemini_API_key")
 
 # Load datasets
-people_df = pd.read_csv("data/person_data.csv")
-food_df = pd.read_csv("data/(NEW)food_data.csv")
+# people_df = pd.read_csv("data/person_data.csv")
+# food_df = pd.read_csv("data/(NEW)food_data.csv")
 
 generation_config = {
     "temperature": 0,
