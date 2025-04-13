@@ -40,7 +40,7 @@ line-height:3.6rem;
     font-size:2.7rem;
     width:fit-content;
     background-clip:text;
-    background: linear-gradient(to right, #4285f4,#d96570);
+    background: linear-gradient(to right, #81ab47,#d3e59f);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -186,8 +186,8 @@ line-height:3.6rem;
     height: 11px;
     width: 100%;
     border-radius: 0.14rem;
-    background: linear-gradient(to right, #4285f4, 
-    var(--primary-color),#4285f4);
+    background: linear-gradient(to right, #81ab47, 
+    var(--primary-color),#81ab47);
     animation:animate 3s linear infinite;
 }
 
