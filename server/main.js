@@ -101,21 +101,21 @@ const createMessageElement = (content, className, ...additionalClasses) => {
     return div;
 };
 
-const showLoadingAnimation = () => {
-    const html = `<div class="message-content">
-                    <img src="user.png" alt="User Image" class="avatar">
-                    <p class="text"></p>
-                    <div class="loading-indicator">
-                        <div class="loading-bar"></div>
-                        <div class="loading-bar"></div>
-                        <div class="loading-bar"></div>
-                    </div>
-                  </div>
-                  <span class="icon material-symbols-rounded">content_copy</span>`;
-    const incomingMessageDiv = createMessageElement(html, "incoming", "loading");
-    chatList.appendChild(incomingMessageDiv);
-    chatList.scrollTo(0, chatList.scrollHeight);
-};
+//const showLoadingAnimation = () => {
+ //   const html = `<div class="message-content">
+   //                 <img src="user.png" alt="User Image" class="avatar">
+     //               <p class="text"></p>
+       //             <div class="loading-indicator">
+         //               <div class="loading-bar"></div>
+           //             <div class="loading-bar"></div>
+             //           <div class="loading-bar"></div>
+               //     </div>
+                 // </div>
+                  //<span class="icon material-symbols-rounded">content_copy</span>`;
+    //const incomingMessageDiv = createMessageElement(html, "incoming", "loading");
+    //chatList.appendChild(incomingMessageDiv);
+    //chatList.scrollTo(0, chatList.scrollHeight);
+//};
 
 const loadLocalStorageData = () => {
     const savedChats = localStorage.getItem("savedChats");
@@ -174,7 +174,7 @@ const copyMessage = (copyIcon) => {
     navigator.clipboard.writeText()
     copyIcon.innerText = "done"; //Show tick icon
     setTimeout(() => copyIcon.innerText="content_copy", 1000); //revert icon after 1 second
-
+}
 
 
 // Load previous chat
@@ -186,6 +186,7 @@ deleteChatButton.addEventListener("click",() => {
         localStorage.removeItem("savedChats");
         loadLocalStorageData();
     }
+});
 
 // Delete button functionality
 //const deleteButton = document.querySelector("#clear-chat-button");
@@ -195,4 +196,3 @@ deleteChatButton.addEventListener("click",() => {
         //localStorage.removeItem("savedChats");
         //document.body.classList.remove("hide-header");
     //});
-//}
