@@ -7,13 +7,14 @@ import pandas as pd
 app = Flask(__name__, static_folder="server", static_url_path="", template_folder="server")
 load_dotenv()
 
-genai.configure(api_key="Gemini_API_key")
+genai.configure(api_key= "Gemini_Key")
 
 # Load datasets
-# people_df = pd.read_csv("data/person_data.csv")
-# food_df = pd.read_csv("data/(NEW)food_data.csv")
+people_df = pd.read_csv("data/person_data.csv")
+food_df = pd.read_csv("data/(NEW)food_data.csv")
 
 generation_config = {
+
     "temperature": 0,
     "top_p": 0.95,
     "top_k": 64,
@@ -45,9 +46,37 @@ def chat():
     user_input = request.json.get('message')
     if not user_input:
         return jsonify({"error": "No message provided"}), 400
+    
+    # Prepare custom prompt using real data
+    food_sample = food_df[['title', 'calories', 'protein', 'fat', 'sodium']].head(10).to_string(index=False)
+    people_sample = people_df[['Ages', 'Gender', 'Height', 'Weight', 'Activity Level', 'Dietary Preference', 'Daily Calorie Target', 'Protein', 'Sugar', 'Sodium', 'Calories', 'Carbohydrates', 'Fiber', 'Fat', 'Disease']].head(10).to_string(index=False)
+
+    # Prompt
+    prompt = f"""
+    You are a smart and helpful meal prep assistant using real food and user profile data.
+
+    Here are some examples of food with their nutrition info:
+    {food_sample}
+
+    Here is a sample of user profiles:
+    {people_sample}
+
+    The user says:
+    "{user_input}"
+
+    Based on their message, respond accordingly. You might:
+    - Suggest meals or snacks based on goals (e.g., bodybuilding, saving money, time-saving)
+    - Offer grocery lists
+    - Recommend batch cooking or prep strategies
+    - Help with one week planning
+    - Consider dietary restrictions or preferences
+    - Give tips on storage or reusing leftovers
+
+    Always be specific and use real-sounding meals. Be friendly and helpful.
+    """
 
     chat_session = model.start_chat(history=history)
-    response = chat_session.send_message(user_input)
+    response = chat_session.send_message(prompt)
     model_response = response.text
 
     # Update history
