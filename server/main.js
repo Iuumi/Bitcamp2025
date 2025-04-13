@@ -101,7 +101,7 @@ const createMessageElement = (content, className, ...additionalClasses) => {
 
 const showLoadingAnimation = () => {
     const html = `<div class="message-content">
-                    <img src="user.png" alt="Mealbot Image" class="avatar">
+                    <img src="user.png" alt="User Image" class="avatar">
                     <p class="text"></p>
                     <div class="loading-indicator">
                         <div class="loading-bar"></div>
