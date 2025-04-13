@@ -27,7 +27,7 @@ model = genai.GenerativeModel(
     model_name='gemini-2.0-flash',
     safety_settings=safety_settings,
     generation_config=generation_config,
-    system_instruction="You are a personal chef."
+    system_instruction="You are a personal chef, your job is to provide the user with meals and information regarding meals based off of the information the user provides you regarding their desired diet, height, weight, gender, lifestyle, and goals. Provide 3 suggestions for breakfast, lunch, & dinner unless they specify more or less."
 )
 
 history = []
