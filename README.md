@@ -1,7 +1,7 @@
 # Bitcamp2025
 
 ## Mealbot
-<img src="logo.png" alt="mealbot" style="width:20px height:20px;"/>
+<img src="logo.png" alt="mealbot" style="width:2px height:2px;text-align:center"/>
 Oftentimes college students who live in apartments aren't aware what foods they can make or have access to and as such have poor diets, we sought to help remedy this issue in an easily accessible manner. This is where Mealbot comes in! It is a chatbot that answers all questions about meal prepping. 
 
 <img src="mealbot_output.png" alt="mealbot output" style="width:1200px;"/>
