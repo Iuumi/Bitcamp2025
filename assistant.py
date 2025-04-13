@@ -2,11 +2,16 @@ from flask import Flask, request, jsonify, send_from_directory
 import os
 import google.generativeai as genai
 from dotenv import load_dotenv
+import pandas as pd
 
 app = Flask(__name__, static_folder="server", static_url_path="", template_folder="server")
 load_dotenv()
 
 genai.configure(api_key="Gemini_API_key")
+
+# Load datasets
+people_df = pd.read_csv("data/person_data.csv")
+food_df = pd.read_csv("data/(NEW)food_data.csv")
 
 generation_config = {
     "temperature": 0,
