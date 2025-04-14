@@ -1,3 +1,4 @@
+
 # Bitcamp2025
 
 ## Mealbot
@@ -29,20 +30,19 @@ To run MealPrep on your local machine, follow these steps:
 
     If you have Git installed, you can clone the project repository:
 
-    ```bash
-    git clone <repository_url> 
-    cd mealbot_bitcamp2025  # Navigate to the project directory
-    ```
+    $ bash
+    $ git clone <repository_url> 
+    $ cd mealbot_bitcamp2025  # Navigate to the project directory
+    
 
 
 **2.  Install Dependencies:**
 
-    Install the required Python packages 
-
+    $ pip install --user Flask python-dotenv pandas google-generativeai
 
 **4.  Obtain a Gemini API Key:**
 
-    * Go to the Google Cloud Console: [https://console.cloud.google.com/](https://console.cloud.google.com/)
+    * Go to the Google Cloud Console: https://console.cloud.google.com
     * Create a new project or select an existing one.
     * Enable the Gemini API for your project.
     * Create API credentials.  You'll need an API key to access the Gemini API.
@@ -55,7 +55,6 @@ To run MealPrep on your local machine, follow these steps:
 **6. Run the application:**
 
     Run the following command in the terminal
-
-    ```bash
-    python assistant.py
-    ```
+    
+    $ python assistant.py
+ 
