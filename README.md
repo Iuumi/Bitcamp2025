@@ -30,7 +30,6 @@ To run MealPrep on your local machine, follow these steps:
 
     If you have Git installed, you can clone the project repository:
 
-    $ bash
     $ git clone https://github.com/Iuumi/mealbot__bitcamp2025.git 
     $ cd mealbot_bitcamp2025  # Navigate to the project directory
     
